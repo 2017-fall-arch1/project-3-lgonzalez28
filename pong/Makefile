@@ -22,7 +22,7 @@ all: pongMain.elf
 
 #additional rules for files
 
-pongMain.elf: ${COMMON_OBJECTS} pongMain.o sizeHandler.o
+pongMain.elf: ${COMMON_OBJECTS} pongMain.o sizeHandler.o buzzer.o ../lib/libTimer.a
 
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ -lTimer -lLcd -lShape -lCircle -lp2sw
 

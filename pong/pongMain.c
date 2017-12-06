@@ -13,6 +13,7 @@
 #include <shape.h>
 #include <abCircle.h>
 #include <string.h>
+#include "buzzer.h"
 
 #define GREEN_LED BIT6
 
@@ -231,7 +232,9 @@ void main()
   layerInit(&layer2);
   layerDraw(&layer2);
   layerGetBounds(&fieldLayer, &fieldFence);
+ // or_sr(0x8);
   enableWDTInterrupts();   
+  buzzer_init();
   or_sr(0x8);
   
   u_int switches = p2sw_read();
@@ -257,10 +260,13 @@ void main()
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
 void wdt_c_handler()
 {
+
   static short count = 0;
   P1OUT |= GREEN_LED;      
   count ++;
   u_int switches = p2sw_read();
+  buzzer_advance_frequency();
+  
   if(count == 10){
     switch(state){
     case 0:
@@ -290,5 +296,9 @@ void wdt_c_handler()
     redrawScreen = 1;
     count = 0;
   }
-  P1OUT &= ~GREEN_LED;    
+  P1OUT &= ~GREEN_LED;
+  
+  
+  
 }
+
